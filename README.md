@@ -61,3 +61,17 @@ public Account createNew(Account account) {
         return this.accountRepository.save(account);
     }
 ```
+
+### 시큐리티 테스트
+* 테스트시 @WithAnonymousUser @WithMockUser(username = "gunho",roles = "ADMIN") 통해 with메서드 대처하여 권한을 준 가정하여 테스트 할 수 있다
+하지만 테스트시 중복된 코드를 많이 사용할 경우가 있어 어노테이션을 만들 수 있다. 
+~~~
+@Retention(RetentionPolicy.RUNTIME)
+@WithMockUser(username = "gunho",roles = "USER")  //<- 중복되는 코드 만든 어노테이션
+public @interface WithUser {
+}
+
+테스트 하는 메서들에 @WithUser 사용하면 위에 USER 롤과 이름이 적용된다.
+
+~~~
+*@Transactional 트랜젝션하면 메서드 사용하고 롤백이 된다 다른 테스트에 영향을 주지않는다.
